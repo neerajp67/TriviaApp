@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.triviaapp.R;
+import com.example.triviaapp.database.SharedPrefManager;
 
 public class FragmentSecondQuestion extends Fragment {
     Context context;
@@ -25,8 +26,8 @@ public class FragmentSecondQuestion extends Fragment {
     private RadioButton radioButton;
     private Button submit;
     int answerIdSelected = 0;
-    String dateTime;
-    String answer1;
+//    String dateTime;
+//    String answer1;
     String answer2;
 
 
@@ -43,10 +44,10 @@ public class FragmentSecondQuestion extends Fragment {
         View view = inflater.inflate(R.layout.fragment_second_question, container, false);
 
         //get data passed by previous fragment
-        Bundle args = getArguments();
-        assert args != null;
-        dateTime = args.getString("dateTime");
-        answer1 = args.getString("firstAnswer");
+//        Bundle args = getArguments();
+//        assert args != null;
+//        dateTime = args.getString("dateTime");
+//        answer1 = args.getString("firstAnswer");
 
         //find the view items
         radio_group = view.findViewById(R.id.radio_group);
@@ -69,7 +70,7 @@ public class FragmentSecondQuestion extends Fragment {
                     Log.d("answer 2", answer2);
 
                     //call addToDb()
-                    addToDb(dateTime, answer1, answer2);
+                    addToDb(answer2);
                 } catch (Exception e) {
                     Toast.makeText(context, "Please select your answer!", Toast.LENGTH_SHORT).show();
                 }
@@ -81,8 +82,8 @@ public class FragmentSecondQuestion extends Fragment {
         return view;
     }
 
-    private void addToDb(String dateTime, String answer1, String answer2) {
-        Log.d("answer", answer1 + " " + answer2 + " " + dateTime);
+    private void addToDb(String answer2) {
+//        Log.d("answer", answer1 + " " + answer2 + " " + dateTime);
 
         //move to next fragment
         FragmentManager fragmentManager = getParentFragmentManager();
@@ -90,11 +91,15 @@ public class FragmentSecondQuestion extends Fragment {
         Fragment fragmentThirdQuestion = new FragmentThirdQuestion();
 
         //passing data to next fragment
-        Bundle args = new Bundle();
-        args.putString("dateTime", dateTime);
-        args.putString("answer1", answer1);
-        args.putString("answer2", answer2);
-        fragmentThirdQuestion.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString("dateTime", dateTime);
+//        args.putString("answer1", answer1);
+//        args.putString("answer2", answer2);
+//        fragmentThirdQuestion.setArguments(args);
+
+//        storing answer2 locally
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(context);
+        sharedPrefManager.putPref("answer2", answer2);
 
         //take to the next page
         fragmentTransaction.replace(R.id.fragment_container, fragmentThirdQuestion).commit();

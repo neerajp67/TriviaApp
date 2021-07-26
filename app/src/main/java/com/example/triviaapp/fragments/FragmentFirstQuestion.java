@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.triviaapp.R;
+import com.example.triviaapp.database.SharedPrefManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -87,10 +88,15 @@ public class FragmentFirstQuestion extends Fragment {
         Fragment fragmentSecondQuestion = new FragmentSecondQuestion();
 
         //passing data to next fragment
-        Bundle args = new Bundle();
-        args.putString("dateTime", dateTime);
-        args.putString("firstAnswer", firstAnswer);
-        fragmentSecondQuestion.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString("dateTime", dateTime);
+//        args.putString("firstAnswer", firstAnswer);
+//        fragmentSecondQuestion.setArguments(args);
+
+//        storing current date and answer1 locally
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(context);
+        sharedPrefManager.putPref("dateTime", dateTime);
+        sharedPrefManager.putPref("answer1", firstAnswer);
 
         //take to the next page
         fragmentTransaction.replace(R.id.fragment_container, fragmentSecondQuestion).commit();

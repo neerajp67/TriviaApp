@@ -18,13 +18,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.triviaapp.R;
 import com.example.triviaapp.database.DatabaseClass;
+import com.example.triviaapp.database.SharedPrefManager;
 
 public class FragmentThirdQuestion extends Fragment {
     Context context;
 
-    String dateTime;
-    String answer1;
-    String answer2;
+//    String dateTime;
+//    String answer1;
+//    String answer2;
     String answer3 = "";
 
     CheckBox option1;
@@ -47,10 +48,10 @@ public class FragmentThirdQuestion extends Fragment {
         View view = inflater.inflate(R.layout.fragment_third_question, container, false);
 
         //get data passed by previous fragment
-        Bundle args = getArguments();
-        dateTime = args.getString("dateTime");
-        answer1 = args.getString("answer1");
-        answer2 = args.getString("answer2");
+//        Bundle args = getArguments();
+//        dateTime = args.getString("dateTime");
+//        answer1 = args.getString("answer1");
+//        answer2 = args.getString("answer2");
 
         //find the view items
         option1 = view.findViewById(R.id.checkbox1);
@@ -81,7 +82,7 @@ public class FragmentThirdQuestion extends Fragment {
                     Log.d("checked", answer3);
 
                     //call addToDb()
-                    addToDb(dateTime, answer1, answer2, answer3);
+                    addToDb(answer3);
                 } else{
                     Toast.makeText(context, "Please select at-least one option", Toast.LENGTH_SHORT).show();
                 }
@@ -91,15 +92,21 @@ public class FragmentThirdQuestion extends Fragment {
         return view;
     }
 
-    private void addToDb(String dateTime, String answer1, String answer2, String answer3) {
-        Log.d("answers", dateTime + " " + answer1 + " " + answer2 + " " + answer3);
+    private void addToDb(String answer3) {
+//        Log.d("answers", dateTime + " " + answer1 + " " + answer2 + " " + answer3);
 
         //creating object of DatabaseClass class
         DatabaseClass db = new DatabaseClass(context);
 
+//        storing answer3 locally
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(context);
+        sharedPrefManager.putPref("answer3", answer3);
         //calling addGameResult of database DatabaseClass class
-        //passing result
-        db.addGameResult(dateTime, answer1, answer2, answer3);
+        //calling database class to add result to db
+        db.addGameResult(sharedPrefManager.getPref("dateTime"),
+                sharedPrefManager.getPref("answer1"),
+                sharedPrefManager.getPref("answer2"),
+                sharedPrefManager.getPref("answer3"));
 
         //move to next fragment
         FragmentManager fragmentManager = getParentFragmentManager();
@@ -107,12 +114,12 @@ public class FragmentThirdQuestion extends Fragment {
         Fragment fragmentSummary = new FragmentSummary();
 
         //passing data to next fragment
-        Bundle args = new Bundle();
-        args.putString("dateTime", dateTime);
-        args.putString("answer1", answer1);
-        args.putString("answer2", answer2);
-        args.putString("answer3", answer3);
-        fragmentSummary.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString("dateTime", dateTime);
+//        args.putString("answer1", answer1);
+//        args.putString("answer2", answer2);
+//        args.putString("answer3", answer3);
+//        fragmentSummary.setArguments(args);
 
         //take to the next page
         fragmentTransaction.replace(R.id.fragment_container, fragmentSummary).commit();

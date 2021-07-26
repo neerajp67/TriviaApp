@@ -15,13 +15,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.triviaapp.R;
+import com.example.triviaapp.database.SharedPrefManager;
 
 public class FragmentSummary extends Fragment {
     Context context;
 
-    String answer1;
-    String answer2;
-    String answer3;
+//    String answer1;
+//    String answer2;
+//    String answer3;
 
     TextView summaryAnswer1, summaryAnswer2, summaryAnswer3;
     Button finish, history;
@@ -37,11 +38,11 @@ public class FragmentSummary extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
 
-        Bundle args = getArguments();
+//        Bundle args = getArguments();
 
-        answer1 = args.getString("answer1");
-        answer2 = args.getString("answer2");
-        answer3 = args.getString("answer3");
+//        answer1 = args.getString("answer1");
+//        answer2 = args.getString("answer2");
+//        answer3 = args.getString("answer3");
 
         summaryAnswer1 = view.findViewById(R.id.summaryAnswer1);
         summaryAnswer2 = view.findViewById(R.id.summaryAnswer2);
@@ -49,9 +50,11 @@ public class FragmentSummary extends Fragment {
         finish = view.findViewById(R.id.finish);
         history = view.findViewById(R.id.history);
 
-        summaryAnswer1.setText("Hello " + answer1);
-        summaryAnswer2.setText(answer2);
-        summaryAnswer3.setText(answer3);
+//        getting answers from sharedpref and setting in the layout
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(context);
+        summaryAnswer1.setText("Hello " + sharedPrefManager.getPref("answer1"));
+        summaryAnswer2.setText(sharedPrefManager.getPref("answer2"));
+        summaryAnswer3.setText(sharedPrefManager.getPref("answer3"));
 
         //finish the game and restarts it
         finish.setOnClickListener(new View.OnClickListener() {
